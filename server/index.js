@@ -21,6 +21,10 @@ const COLLECTION = 'processed_messages';
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from the dist directory
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'dist')));
+
 let db, collection;
 let membersCollection;
 
@@ -118,4 +122,9 @@ connectDB().then(() => {
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
+});
+
+// Catch-all route to serve index.html for SPA
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
